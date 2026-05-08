@@ -9,12 +9,11 @@ async function checkHealth() {
         const infoDiv = document.getElementById('instance-info');
 
         statusDiv.className = 'status-ok';
-        statusDiv.textContent = `✅ Backend opérationnel`;
-        infoDiv.textContent = `Instance: ${data.instance}`;
+        statusDiv.textContent = `Backend opérationnel`;
     } catch (err) {
         const statusDiv = document.getElementById('status');
         statusDiv.className = 'status-error';
-        statusDiv.textContent = `❌ Backend inaccessible - ${err.message}`;
+        statusDiv.textContent = ` Backend inaccessible!! - ${err.message}`;
     }
 }
 

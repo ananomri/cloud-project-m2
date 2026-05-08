@@ -10,7 +10,8 @@ apt-get install -y nodejs git mysql-client
 
 echo "=== [2/5] Clonage du dépôt GitHub ==="
 cd /home/ubuntu
-git clone https://github.com/VOTRE_USERNAME/VOTRE_REPO.git app
+rm -rf app || true
+git clone https://github.com/ananomri/cloud-project-m2.git app
 cd /home/ubuntu/app
 npm install
 

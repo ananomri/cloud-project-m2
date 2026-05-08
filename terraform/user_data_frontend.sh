@@ -9,7 +9,9 @@ apt-get install -y nginx git
 
 echo "=== [2/4] Clonage du dépôt GitHub ==="
 cd /tmp
-git clone https://github.com/VOTRE_USERNAME/VOTRE_REPO.git app
+rm -rf app || true
+git clone --depth 1 https://github.com/ananomri/cloud-project-m2.git app
+
 
 echo "=== [3/4] Déploiement des fichiers frontend ==="
 mkdir -p /var/www/cloud-project
@@ -18,6 +20,11 @@ mkdir -p /var/www/cloud-project
 cp /tmp/app/index.html /var/www/cloud-project/
 cp /tmp/app/style.css  /var/www/cloud-project/
 cp /tmp/app/script.js  /var/www/cloud-project/
+
+echo "=== Fichiers frontend (debug) ==="
+ls -lah /var/www/cloud-project
+head -n 3 /var/www/cloud-project/index.html || true
+
 
 # Injection automatique du DNS de l'ALB dans script.js
 # Remplace le placeholder REPLACE_WITH_ALB_DNS par la vraie valeur fournie par Terraform
@@ -37,8 +44,11 @@ server {
 NGINXEOF
 
 ln -sf /etc/nginx/sites-available/cloud-project /etc/nginx/sites-enabled/cloud-project
-rm -f /etc/nginx/sites-enabled/default
+# Désactive/supprime le site par défaut (pour éviter la page "Welcome to nginx!")
+rm -f /etc/nginx/sites-enabled/default /etc/nginx/sites-available/default || true
 
+# Vérifie que seul notre site est activé
+nginx -t
 systemctl restart nginx
 systemctl enable nginx
 

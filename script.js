@@ -1,5 +1,7 @@
-// ⚠️ REMPLACEZ CECI PAR LE DNS DE VOTRE ALB APRÈS LE DÉPLOIEMENT
-const API_URL = 'http://REPLACE_WITH_ALB_DNS';
+// ⚠️ La variable API_URL est injectée par Terraform (DNS de l'ALB)
+// Si vous avez une build front séparée, remplacez par : http://<ALB_DNS>
+const API_URL = `http://${window.__ALB_DNS__ || 'REPLACE_WITH_ALB_DNS'}`;
+
 
 async function checkHealth() {
     try {

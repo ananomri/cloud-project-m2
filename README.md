@@ -22,62 +22,21 @@ Internet
 
 ---
 
-## 📁 Structure du dépôt
-
-```
-cloud-project/
-├── server.js              ← API Node.js (backend)
-├── package.json           ← Dépendances Node.js
-├── index.html             ← Page principale (frontend)
-├── style.css              ← Styles
-├── script.js              ← JS frontend (contient REPLACE_WITH_ALB_DNS)
-│
-├── main.tf                ← Provider AWS + AMI Ubuntu
-├── variables.tf           ← Déclaration des variables
-├── terraform.tfvars       ← ⚠️ Vos valeurs (PAS sur Git)
-├── vpc.tf                 ← VPC, sous-réseaux, IGW, NAT, routes
-├── alb.tf                 ← ALB, Target Group, Listener
-├── asg_backend.tf         ← Launch Template, ASG, Scaling Policy
-├── ec2_frontend.tf        ← Instance EC2 frontend
-├── rds.tf                 ← RDS MySQL
-├── security_groups.tf     ← SG ALB, Backend, RDS, Frontend
-├── outputs.tf             ← Affichage des URLs après déploiement
-│
-├── user_data_backend.sh   ← Script démarrage EC2 backend (git clone + npm start)
-└── user_data_frontend.sh  ← Script démarrage EC2 frontend (git clone + nginx)
-```
-
----
-
 ## 🚀 Étapes de déploiement
 
-### ÉTAPE 1 — Préparer le dépôt GitHub
 
 ```bash
-# 1. Créez un dépôt PUBLIC sur https://github.com/new
-#    Nom suggéré : cloud-project
 
 # 2. Dans ce dossier, initialisez git
 git init
 git add .
 git commit -m "initial commit"
 git branch -M main
-git remote add origin https://github.com/VOTRE_USERNAME/VOTRE_REPO.git
+git remote add origin https://github.com/ananomri/cloud-project-m2.git
 git push -u origin main
 ```
 
-### ÉTAPE 2 — Mettre à jour l'URL GitHub dans les scripts
 
-Éditez **user_data_backend.sh** et **user_data_frontend.sh**, remplacez :
-```
-https://github.com/VOTRE_USERNAME/VOTRE_REPO.git
-```
-par votre vraie URL GitHub, puis re-committez :
-```bash
-git add user_data_backend.sh user_data_frontend.sh
-git commit -m "update github url"
-git push
-```
 
 ### ÉTAPE 3 — Configurer terraform.tfvars
 
@@ -132,27 +91,3 @@ Ouvrez **frontend_url** dans votre navigateur. ✅
 ```bash
 terraform destroy
 # Tapez "yes" — supprime TOUT (EC2, ALB, RDS, VPC...)
-```
-
----
-
-## 🔒 Security Groups (ce qui est contrôlé)
-
-| Composant | Entrant | Depuis |
-|-----------|---------|--------|
-| ALB | port 80 | 0.0.0.0/0 (internet) |
-| EC2 Backend | port 3000 | SG de l'ALB uniquement |
-| RDS | port 3306 | SG du Backend uniquement |
-| EC2 Frontend | port 80 | 0.0.0.0/0 (internet) |
-| EC2 Frontend | port 22 | Votre IP uniquement |
-
----
-
-## 📡 API Endpoints
-
-| Méthode | Route | Description |
-|---------|-------|-------------|
-| GET | /health | Health check ALB |
-| GET | /api/messages | Liste des messages |
-| POST | /api/messages | Créer un message |
-| GET | /api/info | Info instance |

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projet Cloud AWS</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>☁️ Projet Cloud AWS</h1>
+            <p>Application Full-Stack déployée sur AWS avec Terraform</p>
+        </header>
+
+        <div class="status-card">
+            <h2>📡 Statut du Backend</h2>
+            <div id="status">Chargement...</div>
+            <div id="instance-info"></div>
+        </div>
+
+        <div class="form-card">
+            <h2>💬 Nouveau Message</h2>
+            <form id="messageForm">
+                <input type="text" id="author" placeholder="Votre nom" required>
+                <textarea id="content" placeholder="Votre message..." required></textarea>
+                <button type="submit">Envoyer</button>
+            </form>
+        </div>
+
+        <div class="messages-card">
+            <h2>📨 Messages</h2>
+            <button onclick="loadMessages()" class="refresh-btn">🔄 Rafraîchir</button>
+            <div id="messages">Chargement...</div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

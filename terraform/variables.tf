@@ -1,10 +1,10 @@
 variable "aws_region" {
-  description = "Région AWS"
+  description = "Région AWS"#saffiche dans terraform plan
   type        = string
   default     = "us-east-1"
 }
 
-variable "project_name" {
+variable "project_name" {#pref pour nommer tts les ressources
   description = "Nom du projet"
   type        = string
   default     = "cloud-project"
@@ -13,8 +13,7 @@ variable "project_name" {
 variable "db_password" {
   description = "Mot de passe RDS"
   type        = string
-  default     = "SuperSecretPassword123!"
-  sensitive   = true
+  sensitive   = true #Cache la valeur dans les logs
 }
 
 variable "db_username" {
@@ -24,21 +23,21 @@ variable "db_username" {
 }
 
 variable "my_ip" {
-  description = "Votre IP pour SSH (format: x.x.x.x/32)"
+  description = "IP pour SSH (format: x.x.x.x/32)"
   type        = string
-  default     = "0.0.0.0/0"
+  default     = "158.12.10.0/32"
 }
 
-# ==================== SANDBOX OPTIONS ====================
+#SANDBOX OPTIONS
 
 variable "use_existing_key" {
-  description = "TRUE = utiliser une clé existante du sandbox, FALSE = Terraform crée la clé"
+  description = "TRUE = utiliser une cle existante du sandbox, FALSE = Terraform cree la cle"
   type        = bool
   default     = true
 }
 
 variable "existing_key_name" {
-  description = "Nom de la clé SSH déjà existante dans le sandbox (ex: vockey, aws-sandbox-key)"
+  description = "Nom de la cle SSH deja existante dans le sandbox (ex: vockey, aws-sandbox-key)"
   type        = string
   default     = "vockey"
 }
@@ -52,5 +51,5 @@ variable "instance_type" {
 variable "rds_instance_class" {
   description = "Type d'instance RDS"
   type        = string
-  default     = "db.t2.micro"
+  default     = "db.t3.micro"
 }

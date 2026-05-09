@@ -1,16 +1,16 @@
-# ==================== VPC ====================
+#VPC
 resource "aws_vpc" "main" {
   cidr_block           = "10.0.0.0/16"
-  enable_dns_hostnames = true
-  enable_dns_support   = true
+  enable_dns_hostnames = true #AWS attribue un nom DNS a chaque instance EC2
+  enable_dns_support   = true #Active le resolveur DNS interne dAWS AmazonProvidedDNS
 
   tags = {
-    Name = "${var.project_name}-vpc"
+    Name = "${var.project_name}-vpc" #ce qui saffiche dans la console AWS
   }
 }
 
-# ==================== Internet Gateway ====================
-resource "aws_internet_gateway" "igw" {
+#Internet Gateway
+resource "aws_internet_gateway" "igw" {#Cree la passerelle qui relie le VPC à Internet
   vpc_id = aws_vpc.main.id
 
   tags = {
@@ -18,10 +18,10 @@ resource "aws_internet_gateway" "igw" {
   }
 }
 
-# ==================== Subnets Publics ====================
+#Subnets Publics
 resource "aws_subnet" "public_a" {
   vpc_id                  = aws_vpc.main.id
-  cidr_block              = "10.0.1.0/24"
+  cidr_block              = "10.0.1.0/24"#btw AWS réserve 5 IPs
   availability_zone       = "${var.aws_region}a"
   map_public_ip_on_launch = true
 
@@ -41,7 +41,7 @@ resource "aws_subnet" "public_b" {
   }
 }
 
-# ==================== Subnets Privés ====================
+#Subnets Privés
 resource "aws_subnet" "private_a" {
   vpc_id            = aws_vpc.main.id
   cidr_block        = "10.0.3.0/24"
@@ -62,8 +62,8 @@ resource "aws_subnet" "private_b" {
   }
 }
 
-# ==================== NAT Gateway ====================
-resource "aws_eip" "nat" {
+#NAT Gateway
+resource "aws_eip" "nat" {#IP publique fixe AWS
   domain = "vpc"
 
   tags = {
@@ -79,10 +79,10 @@ resource "aws_nat_gateway" "nat" {
     Name = "${var.project_name}-nat-gw"
   }
 
-  depends_on = [aws_internet_gateway.igw]
+  depends_on = [aws_internet_gateway.igw]#force Terraform a creer lIGW avant le NAT
 }
 
-# ==================== Route Tables ====================
+#Route Tables
 # Route Table Publique
 resource "aws_route_table" "public" {
   vpc_id = aws_vpc.main.id
@@ -97,7 +97,7 @@ resource "aws_route_table" "public" {
   }
 }
 
-resource "aws_route_table_association" "public_a" {
+resource "aws_route_table_association" "public_a" {#ATTACHE la route table publique aux subnets publics
   subnet_id      = aws_subnet.public_a.id
   route_table_id = aws_route_table.public.id
 }
@@ -108,7 +108,7 @@ resource "aws_route_table_association" "public_b" {
 }
 
 # Route Table Privée
-resource "aws_route_table" "private" {
+resource "aws_route_table" "private" {#Pour sortir vers Internet passe par le NAT pas direct
   vpc_id = aws_vpc.main.id
 
   route {
@@ -121,7 +121,7 @@ resource "aws_route_table" "private" {
   }
 }
 
-resource "aws_route_table_association" "private_a" {
+resource "aws_route_table_association" "private_a" {# on attache la route table privee aux subnets prives
   subnet_id      = aws_subnet.private_a.id
   route_table_id = aws_route_table.private.id
 }

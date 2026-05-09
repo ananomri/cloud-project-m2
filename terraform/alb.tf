@@ -1,7 +1,7 @@
-# ==================== Application Load Balancer ====================
+#Application Load Balancer
 resource "aws_lb" "main" {
   name               = "${var.project_name}-alb"
-  internal           = false
+  internal           = false #ALB public (DNS public accessible Internet)
   load_balancer_type = "application"
   security_groups    = [aws_security_group.alb.id]
   subnets            = [aws_subnet.public_a.id, aws_subnet.public_b.id]
@@ -11,7 +11,7 @@ resource "aws_lb" "main" {
   }
 }
 
-# ==================== Target Group ====================
+#Target Group
 resource "aws_lb_target_group" "backend" {
   name     = "${var.project_name}-tg"
   port     = 3000
@@ -35,7 +35,7 @@ resource "aws_lb_target_group" "backend" {
   }
 }
 
-# ==================== Listener ====================
+#Listener
 resource "aws_lb_listener" "http" {
   load_balancer_arn = aws_lb.main.arn
   port              = "80"

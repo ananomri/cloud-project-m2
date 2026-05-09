@@ -1,4 +1,4 @@
-# ==================== Security Group ALB ====================
+#Security Group ALB
 resource "aws_security_group" "alb" {
   name        = "${var.project_name}-sg-alb"
   description = "Security Group pour l ALB - HTTP depuis internet"
@@ -25,7 +25,7 @@ resource "aws_security_group" "alb" {
   }
 }
 
-# ==================== Security Group Backend EC2 ====================
+#Security Group Backend EC2 
 resource "aws_security_group" "backend" {
   name        = "${var.project_name}-sg-backend"
   description = "Security Group pour les instances backend - uniquement depuis ALB"
@@ -52,7 +52,7 @@ resource "aws_security_group" "backend" {
   }
 }
 
-# ==================== Security Group RDS ====================
+#Security Group RDS 
 resource "aws_security_group" "rds" {
   name        = "${var.project_name}-sg-rds"
   description = "Security Group pour RDS - uniquement depuis les backends"
@@ -79,7 +79,8 @@ resource "aws_security_group" "rds" {
   }
 }
 
-# ==================== Security Group Frontend EC2 ====================
+# Security Group Frontend EC2
+
 resource "aws_security_group" "frontend" {
   name        = "${var.project_name}-sg-frontend"
   description = "Security Group pour le serveur frontend"
@@ -94,14 +95,14 @@ resource "aws_security_group" "frontend" {
   }
 
   ingress {
-    description = "SSH depuis votre IP (debug)"
+    description = "SSH depuis  IP"
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
     cidr_blocks = [var.my_ip]
   }
 
-  egress {
+  egress { 
     description = "Tout sortant"
     from_port   = 0
     to_port     = 0

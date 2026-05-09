@@ -1,9 +1,9 @@
-# ==================== Launch Template Backend ====================
+#Launch Template Backend
 resource "aws_launch_template" "backend" {
   name_prefix   = "${var.project_name}-backend-"
   image_id      = data.aws_ami.ubuntu.id
   instance_type = var.instance_type
-  key_name      = var.existing_key_name    # ← simplifié : plus de condition
+  key_name      = var.existing_key_name    
 
   vpc_security_group_ids = [aws_security_group.backend.id]
 
@@ -21,7 +21,7 @@ resource "aws_launch_template" "backend" {
   }
 }
 
-# ==================== Auto Scaling Group ====================
+#Auto Scaling Group
 resource "aws_autoscaling_group" "backend" {
   name                = "${var.project_name}-asg"
   vpc_zone_identifier = [aws_subnet.private_a.id, aws_subnet.private_b.id]
@@ -43,7 +43,7 @@ resource "aws_autoscaling_group" "backend" {
   }
 }
 
-# ==================== Scaling Policy (CPU > 70%) ====================
+#Scaling Policy (CPU > 70%) 
 resource "aws_autoscaling_policy" "cpu_scale_up" {
   name                   = "${var.project_name}-cpu-scale-up"
   scaling_adjustment     = 1
